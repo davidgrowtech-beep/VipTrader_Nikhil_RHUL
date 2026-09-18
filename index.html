@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Learn with Nikhil Ghodke — VIP Trader Community</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Sans+Devanagari:wght@500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --ink:#FFF8EE;
+    --navy:#170B3B;
+    --navy2:#2A1467;
+    --plum:#2E1760;
+    --coral:#FF5D5D;
+    --coral2:#FF8A3D;
+    --mint:#19E3A6;
+    --gold:#FFC93C;
+    --violet:#8B5CF6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Manrope','Noto Sans Devanagari',sans-serif;
+    background:
+      radial-gradient(circle at 15% -10%, rgba(255,93,93,.35), transparent 45%),
+      radial-gradient(circle at 110% 15%, rgba(25,227,166,.28), transparent 45%),
+      radial-gradient(circle at 50% 120%, rgba(139,92,246,.35), transparent 50%),
+      linear-gradient(180deg,var(--navy) 0%,var(--navy2) 55%,var(--navy) 100%);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;justify-content:center;
+    padding:22px 14px 110px;
+    overflow-x:hidden;
+    position:relative;
+  }
+  .mr{font-family:'Noto Sans Devanagari','Manrope',sans-serif;}
+  /* ambient candlestick pattern */
+  .candles{position:fixed;inset:0;z-index:-1;opacity:.16;pointer-events:none;
+    background-image:repeating-linear-gradient(90deg, transparent 0 26px, rgba(255,255,255,.04) 26px 27px);}
+  .bar-field{position:fixed;left:0;right:0;bottom:0;height:220px;z-index:-1;display:flex;align-items:flex-end;gap:10px;padding:0 6px 0;opacity:.35;filter:blur(.3px);}
+  .bar-field span{flex:1;border-radius:6px 6px 0 0;animation:rise 3.6s ease-in-out infinite;}
+  @keyframes rise{0%,100%{transform:scaleY(.5);}50%{transform:scaleY(1);}}
+
+  .wrap{width:100%;max-width:440px;position:relative;z-index:2;}
+
+  .eyebrow{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    margin:0 auto 18px;width:max-content;
+    padding:8px 18px;border-radius:999px;
+    background:rgba(25,227,166,.12);
+    border:1px solid rgba(25,227,166,.5);
+    color:var(--mint);font-weight:700;font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;
+    box-shadow:0 0 22px rgba(25,227,166,.15);
+  }
+  .eyebrow i{font-size:12px;}
+
+  .hero{position:relative;display:flex;flex-direction:column;align-items:center;margin-bottom:22px;}
+  .ring{
+    position:relative;width:132px;height:132px;border-radius:50%;
+    background:conic-gradient(from 0deg,var(--coral),var(--gold),var(--mint),var(--violet),var(--coral));
+    padding:5px;animation:spin 9s linear infinite;
+    box-shadow:0 15px 40px rgba(255,93,93,.35);
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .ring-inner{width:100%;height:100%;border-radius:50%;background:var(--navy);padding:4px;}
+  .profile{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;}
+  .spark{position:absolute;bottom:-4px;right:-2px;width:38px;height:38px;border-radius:50%;
+    background:linear-gradient(135deg,var(--mint),#0FBF8D);
+    display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--navy);
+    border:3px solid var(--navy);box-shadow:0 6px 16px rgba(25,227,166,.5);}
+
+  h1{
+    font-family:'Noto Sans Devanagari',sans-serif;
+    font-weight:800;font-size:24px;line-height:1.35;text-align:center;margin-top:16px;
+    background:linear-gradient(90deg,var(--gold),var(--coral2) 55%,var(--coral));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 4px 30px rgba(255,93,93,.25);
+    padding:0 6px;
+  }
+  .subline{margin-top:8px;font-size:12.5px;color:#C9C0EE;text-align:center;font-weight:600;letter-spacing:.3px;}
+
+  /* stat chips */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:22px 0;}
+  .chip{
+    border-radius:16px;padding:14px 8px;text-align:center;
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.09);
+    backdrop-filter:blur(6px);
+  }
+  .chip:nth-child(1){border-top:3px solid var(--coral);}
+  .chip:nth-child(2){border-top:3px solid var(--mint);}
+  .chip:nth-child(3){border-top:3px solid var(--gold);}
+  .chip i{font-size:17px;display:block;margin-bottom:6px;}
+  .chip:nth-child(1) i{color:var(--coral);}
+  .chip:nth-child(2) i{color:var(--mint);}
+  .chip:nth-child(3) i{color:var(--gold);}
+  .chip .num{display:block;font-weight:800;font-size:13.5px;color:#fff;margin-bottom:3px;}
+  .chip .lbl{font-size:10px;line-height:1.35;color:#C9C0EE;font-weight:600;}
+
+  .desc-card{
+    background:linear-gradient(135deg, rgba(255,138,61,.14), rgba(139,92,246,.14));
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:18px;padding:18px;margin-bottom:22px;
+    font-family:'Noto Sans Devanagari',sans-serif;
+    font-size:15.5px;line-height:1.75;color:#FFF3E0;font-weight:600;text-align:center;
+  }
+
+  .cta{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    width:100%;padding:18px;border-radius:16px;text-decoration:none;
+    color:#1A0B00;font-weight:800;font-size:15.5px;letter-spacing:.3px;
+    background:linear-gradient(120deg,var(--gold),var(--coral2) 60%,var(--coral));
+    box-shadow:0 14px 34px rgba(255,93,93,.4);
+    position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.35);
+  }
+  .cta::after{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-20deg);animation:shine 2.6s infinite;}
+  @keyframes shine{100%{left:140%;}}
+
+  .benefits{margin-top:26px;display:flex;flex-direction:column;gap:10px;}
+  .benefit{
+    display:flex;align-items:center;gap:13px;
+    background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);
+    border-radius:14px;padding:13px 14px;
+  }
+  .benefit .ic{
+    width:36px;height:36px;min-width:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-size:15px;
+  }
+  .benefit span.txt{font-size:13.5px;color:#EDE7FF;font-weight:600;line-height:1.4;}
+  .benefit span.txt.mr{font-family:'Noto Sans Devanagari',sans-serif;}
+
+  .timer{margin-top:20px;text-align:center;font-size:12.5px;color:#B8AEE0;font-weight:600;}
+  .timer b{color:var(--mint);}
+
+  .adv{
+    margin-top:26px;text-align:center;padding-top:16px;border-top:1px dashed rgba(255,255,255,.15);
+  }
+  .adv p{font-size:10.5px;color:#8f86bd;font-weight:700;margin-bottom:8px;letter-spacing:.4px;text-transform:uppercase;}
+  .adv a{
+    display:inline-block;background:rgba(255,201,60,.15);border:1px solid rgba(255,201,60,.4);
+    color:var(--gold);padding:7px 16px;border-radius:8px;text-decoration:none;font-weight:700;font-size:11.5px;
+  }
+  .disclaimer{margin-top:14px;font-size:10px;line-height:1.7;color:#8f86bd;text-align:center;padding:0 6px;}
+
+  .fixed-cta{
+    position:fixed;bottom:0;left:0;width:100%;z-index:999;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg, transparent, rgba(10,3,30,.85) 30%);
+    display:flex;justify-content:center;
+  }
+  .fixed-cta a{
+    position:relative;width:100%;max-width:440px;overflow:hidden;
+    background:linear-gradient(120deg,var(--coral),var(--coral2) 55%,var(--gold));
+    padding:15px 18px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:9px;
+    text-decoration:none;color:#1A0B00;font-weight:800;font-size:14.5px;
+    box-shadow:0 12px 30px rgba(0,0,0,.45);
+    animation:pulse 2.2s infinite;border:1px solid rgba(255,255,255,.35);
+  }
+  .fixed-cta a span.shine{position:absolute;top:0;left:-120%;width:70%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+    transform:skewX(-20deg);animation:shine 2.8s infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.015);}}
+
+  @media(max-width:380px){
+    h1{font-size:21px;}
+    .ring{width:112px;height:112px;}
+  }
+</style>
+
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1073967445607683');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1073967445607683&ev=PageView&noscript=1"/></noscript>
+</head>
+<body>
+
+<div class="candles"></div>
+<div class="bar-field" id="barField"></div>
+
+<div class="wrap">
+
+  <div class="eyebrow"><i class="fas fa-shield-check"></i> Verified Learning Community</div>
+
+  <div class="hero">
+    <div class="ring">
+      <div class="ring-inner">
+        <img src="pic.jpeg" alt="Nikhil Ghodke" class="profile">
+      </div>
+      <div class="spark"><i class="fas fa-arrow-trend-up"></i></div>
+    </div>
+    <h1 class="mr">निखिल घोडके (व्हीआयपी ट्रेडर) सोबत शिका</h1>
+    <div class="subline">Strategic · Systematic · Trusted Trading Education</div>
+  </div>
+
+  <div class="stats">
+    <div class="chip">
+      <i class="fas fa-star"></i>
+      <span class="num">10,365+</span>
+      <span class="lbl">Strong dedicated learners community</span>
+    </div>
+    <div class="chip">
+      <i class="fas fa-chart-line"></i>
+      <span class="num">Fastest Growing</span>
+      <span class="lbl">Strategic &amp; systematic trustworthy platform</span>
+    </div>
+    <div class="chip">
+      <i class="fas fa-fire"></i>
+      <span class="num">Daily</span>
+      <span class="lbl">Analysed &amp; proven educational updates</span>
+    </div>
+  </div>
+
+  <div class="desc-card mr">📚 अंदाज नव्हे, तर जागतिक दर्जाची सर्वोत्तम आणि पद्धतशीर कौशल्ये प्रदान करणे.</div>
+
+  <a class="cta" href="https://t.me/+5DltEY04tN0zMjVl" onclick="trackAndRedirect(event)">
+    <i class="fab fa-telegram"></i> JOIN FREE LEARNING COMMUNITY <i class="fas fa-arrow-right"></i>
+  </a>
+
+  <div class="benefits">
+    <div class="benefit">
+      <div class="ic" style="background:rgba(25,227,166,.15);color:var(--mint);"><i class="fas fa-chart-line"></i></div>
+      <span class="txt">Daily updates for refined skills</span>
+    </div>
+    <div class="benefit">
+      <div class="ic" style="background:rgba(255,138,61,.15);color:var(--coral2);"><i class="fas fa-book-open"></i></div>
+      <span class="txt">Free huge learning content</span>
+    </div>
+    <div class="benefit">
+      <div class="ic" style="background:rgba(255,93,93,.15);color:var(--coral);"><i class="fas fa-bullseye"></i></div>
+      <span class="txt">Easy &amp; proven explanation for beginners</span>
+    </div>
+    <div class="benefit">
+      <div class="ic" style="background:rgba(139,92,246,.18);color:var(--violet);"><i class="fas fa-users"></i></div>
+      <span class="txt">24 x 7 support system &amp; dedicated community</span>
+    </div>
+    <div class="benefit">
+      <div class="ic" style="background:rgba(255,201,60,.18);color:var(--gold);"><i class="fas fa-lightbulb"></i></div>
+      <span class="txt mr">वास्तविक जगात वापरण्यासाठी तज्ज्ञांकडून शिका</span>
+    </div>
+  </div>
+
+  <div class="timer" id="countTxt"></div>
+
+  <div class="adv">
+    <p>Advertised by · SRS Marketing Agency</p>
+    <a href="https://t.me/srsagency" target="_blank">📩 Visit @ SRS Marketing</a>
+  </div>
+  <div class="disclaimer"><strong>Disclaimer:</strong> This platform is only for educational purposes, not recommended as investment, trading or financial advice.</div>
+</div>
+
+<div class="fixed-cta">
+  <a href="https://t.me/+5DltEY04tN0zMjVl" onclick="trackAndRedirect(event)">
+    <span class="shine"></span>
+    <i class="fab fa-telegram" style="position:relative;z-index:1;"></i>
+    <span style="position:relative;z-index:1;">JOIN FREE LEARNING COMMUNITY</span>
+  </a>
+</div>
+
+<script>
+/* ambient bar-field generation (purely decorative) */
+(function(){
+  var field = document.getElementById('barField');
+  var colors = ['#19E3A6','#FF5D5D','#FFC93C','#8B5CF6','#FF8A3D'];
+  for(var i=0;i<28;i++){
+    var s = document.createElement('span');
+    var h = 30 + Math.random()*160;
+    s.style.height = h+'px';
+    s.style.background = colors[i % colors.length];
+    s.style.opacity = 0.5;
+    s.style.animationDelay = (Math.random()*3)+'s';
+    s.style.transformOrigin='bottom';
+    field.appendChild(s);
+  }
+})();
+</script>
+
+<script>
+/* =========================================================================
+   UNIVERSAL TELEGRAM REDIRECT + TRACKING SCRIPT
+   ========================================================================= */
+
+var TG_CONFIG = {
+  telegramUrl: "https://t.me/+5DltEY04tN0zMjVl",
+  countdownSeconds: 25,
+  timerElementId: "countTxt",
+  timerTemplate: "Will be redirecting in {n} seconds....",
+  timerColor: "#19E3A6",
+
+  minDwellMs: 3000,
+  requireInteractionSignal: true,
+
+  leadEventName: "Lead",
+  lowQualityEventName: "LowQualityClick",
+  fireLeadOnAutoTimeout: false,
+
+  capiEndpoint: "",
+};
+
+(function () {
+
+  var pageLoadTime = Date.now();
+  var hasScrolled = false;
+  var hasMoved = false;
+  var moveDistance = 0;
+  var lastX = null, lastY = null;
+
+  function trackMove(x, y) {
+    if (lastX !== null) { moveDistance += Math.abs(x - lastX) + Math.abs(y - lastY); }
+    lastX = x; lastY = y;
+    if (moveDistance > 15) hasMoved = true;
+  }
+  window.addEventListener('scroll', function () { hasScrolled = true; }, { once: true, passive: true });
+  document.addEventListener('mousemove', function (e) { trackMove(e.clientX, e.clientY); });
+  document.addEventListener('touchmove', function (e) {
+    if (e.touches && e.touches[0]) trackMove(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+  document.addEventListener('touchstart', function () { hasMoved = true; }, { once: true, passive: true });
+
+  function isLikelyRealUser() {
+    var timeOnPage = Date.now() - pageLoadTime;
+    if (timeOnPage < TG_CONFIG.minDwellMs) return false;
+    if (TG_CONFIG.requireInteractionSignal && !hasScrolled && !hasMoved) return false;
+    return true;
+  }
+
+  var DEDUP_KEY = "tg_lead_fired_" + TG_CONFIG.telegramUrl;
+  function alreadyFiredThisSession() {
+    try { return sessionStorage.getItem(DEDUP_KEY) === "1"; }
+    catch (e) { return false; }
+  }
+  function markFiredThisSession() {
+    try { sessionStorage.setItem(DEDUP_KEY, "1"); } catch (e) {}
+  }
+
+  function getCookie(name) {
+    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : undefined;
+  }
+
+  var hasFired = false;
+
+  function fireConversion(isAutoTimeout) {
+    if (hasFired || alreadyFiredThisSession()) return;
+
+    var realUser = isLikelyRealUser();
+    var shouldFireLead = realUser && (!isAutoTimeout || TG_CONFIG.fireLeadOnAutoTimeout);
+
+    if (typeof fbq === 'undefined') {
+      console.warn('fbq is not defined. Pixel tracking skipped.');
+    } else if (shouldFireLead) {
+      var eventId = 'tg_lead_' + Date.now();
+      fbq('track', TG_CONFIG.leadEventName, {
+        content_name: 'Telegram Community',
+        value: 0,
+        currency: 'INR'
+      }, { eventID: eventId });
+
+      if (TG_CONFIG.capiEndpoint) {
+        fetch(TG_CONFIG.capiEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventId: eventId,
+            eventSourceUrl: window.location.href,
+            fbp: getCookie('_fbp'),
+            fbc: getCookie('_fbc')
+          }),
+          keepalive: true
+        }).catch(function (err) { console.error('CAPI send failed:', err); });
+      }
+    } else if (typeof fbq !== 'undefined') {
+      fbq('trackCustom', TG_CONFIG.lowQualityEventName);
+    }
+
+    hasFired = true;
+    markFiredThisSession();
+  }
+
+  function trackAndRedirect(event) {
+    if (event) event.preventDefault();
+    if (countdown) clearInterval(countdown);
+    fireConversion(false);
+    setTimeout(function () {
+      window.location.href = TG_CONFIG.telegramUrl;
+    }, 300);
+  }
+  window.trackAndRedirect = trackAndRedirect;
+
+  function autoRedirect() {
+    fireConversion(true);
+    window.location.href = TG_CONFIG.telegramUrl;
+  }
+
+  var time = TG_CONFIG.countdownSeconds;
+  var countTxt = document.getElementById(TG_CONFIG.timerElementId);
+  var countdown = null;
+
+  function paintTimer() {
+    if (!countTxt) return;
+    countTxt.innerHTML = TG_CONFIG.timerTemplate.replace(
+      '{n}',
+      '<b style="color:' + TG_CONFIG.timerColor + ';font-weight:800;">' + time + '</b>'
+    );
+  }
+  paintTimer();
+
+  countdown = setInterval(function () {
+    time--;
+    paintTimer();
+    if (time <= 0) {
+      clearInterval(countdown);
+      autoRedirect();
+    }
+  }, 1000);
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.cta-telegram, [data-tg-cta]').forEach(function (btn) {
+      if (btn.hasAttribute('onclick')) return;
+      btn.addEventListener('click', function (e) {
+        trackAndRedirect(e);
+      });
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>

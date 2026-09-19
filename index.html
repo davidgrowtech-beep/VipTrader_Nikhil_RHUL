@@ -390,13 +390,45 @@ var TG_CONFIG = {
     markFiredThisSession();
   }
 
+  /* ---- FB/Instagram in-app browser detection & escape ----
+     These webviews only hand a t.me link off to the Telegram app during the
+     exact synchronous click gesture. Any preventDefault()/setTimeout() delay
+     breaks that hand-off silently -- Meta still counts the Lead, but the
+     Telegram app never opens. This is the root cause of "Meta shows leads,
+     Telegram shows zero joins". */
+  var ua = navigator.userAgent || "";
+  var isFbIgWebview = /FBAN|FBAV|Instagram/i.test(ua);
+  var isAndroid = /Android/i.test(ua);
+  var isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+  function buildIntentUrl(url) {
+    var stripped = url.replace(/^https?:\/\//, '');
+    return 'intent://' + stripped + '#Intent;scheme=https;package=com.android.chrome;end';
+  }
+
+  function showIosOpenInBrowserBanner() {
+    var banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#FFC93C;color:#1A0B00;padding:10px 14px;text-align:center;font-weight:700;font-size:12.5px;font-family:Manrope,sans-serif;';
+    banner.innerHTML = 'Yeh link is app ke andar nahi khulega — top-right ⋯ menu se "Open in Browser" dabayein.';
+    document.body.prepend(banner);
+  }
+
+  if (isFbIgWebview && isIOS) {
+    showIosOpenInBrowserBanner();
+  }
+  document.querySelectorAll('a[href="' + TG_CONFIG.telegramUrl + '"]').forEach(function (a) {
+    if (isFbIgWebview && isAndroid) {
+      a.setAttribute('href', buildIntentUrl(TG_CONFIG.telegramUrl));
+    }
+  });
+
   function trackAndRedirect(event) {
-    if (event) event.preventDefault();
+    // No preventDefault() and no setTimeout() here on purpose: letting the
+    // anchor's own href navigate immediately, on the same click, is what
+    // preserves the "user activation" signal in-app browsers require to
+    // open the Telegram app. Just track, don't intercept the navigation.
     if (countdown) clearInterval(countdown);
     fireConversion(false);
-    setTimeout(function () {
-      window.location.href = TG_CONFIG.telegramUrl;
-    }, 300);
   }
   window.trackAndRedirect = trackAndRedirect;
 
